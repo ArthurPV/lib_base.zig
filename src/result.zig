@@ -30,6 +30,13 @@ pub fn Result(comptime T: type, comptime E: type) type {
                 .err => |v| v,
             };
         } 
+
+        pub fn unwrapOr(self: *const Self, default: T) T {
+            return switch (self.*) {
+                .ok => |v| v,
+                .err => |_| default
+            };
+        }
     };
 }
 
@@ -61,4 +68,10 @@ test "Result.unwrapErr" {
     const res = Result(i32, []const u8).err("error");
 
     std.debug.assert(std.mem.eql(u8, res.unwrapErr(), "error"));
+}
+
+test "Result.unwrapOr" {
+    const res = Result(i32, []const u8).err("error");
+
+    std.debug.assert(res.unwrapOr(30) == 30);
 }
