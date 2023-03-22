@@ -10,8 +10,17 @@ pub fn Node(comptime T: type) type {
 
         /// Add node to the end of the node.
         pub fn append(self: *Self, node: *Node(T)) void {
-            node.next = self.next;
-            self.next = node;
+            var current = self.next;
+
+            if (current != null) {
+                while (current.?.next != null) {
+                    current = current.?.next;
+                }
+
+                current.?.next = node;
+            } else {
+                self.next = node;
+            }
         }
 
         /// Init node with value.
