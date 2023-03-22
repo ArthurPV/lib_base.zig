@@ -12,12 +12,12 @@ pub fn Option(comptime T: type) type {
         pub fn @"and"(comptime U: type, self: Option(T), other: Option(U)) Option(U) {
             return switch (self) {
                 .some => |_| other,
-                .none => Option(U).none()
+                .none => Option(U).none(),
             };
         }
 
         pub fn insert(self: *Self, value: T) T {
-            self.* = Option(T){ .some = value }; 
+            self.* = Option(T){ .some = value };
 
             return value;
         }
@@ -33,7 +33,7 @@ pub fn Option(comptime T: type) type {
         pub fn @"or"(self: Self, other: Self) Self {
             return switch (self) {
                 .some => |x| some(x),
-                .none => other
+                .none => other,
             };
         }
 
@@ -50,7 +50,7 @@ pub fn Option(comptime T: type) type {
                 .some => |v| v,
                 .none => @panic("Failed to unwrap"),
             };
-        }  
+        }
     };
 }
 
@@ -104,7 +104,7 @@ test "Option.some" {
 
     switch (op) {
         .some => |v| std.debug.assert(v == 30),
-        .none => {}
+        .none => {},
     }
 }
 

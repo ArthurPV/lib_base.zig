@@ -5,6 +5,7 @@ pub fn Tree(comptime T: type) type {
     return struct {
         const Self = @This();
 
+
         ///            value
         ///              ^
         ///             / \
@@ -15,7 +16,6 @@ pub fn Tree(comptime T: type) type {
         ///          ^       ^
         ///         / \     / \
         ///        /   \   /   \
-
         left: ?*Tree(T) = null,
         right: ?*Tree(T) = null,
         value: T,

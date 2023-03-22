@@ -18,11 +18,11 @@ pub fn Result(comptime T: type, comptime E: type) type {
         }
 
         pub fn err(v: E) Self {
-            return Self { .err = v };
+            return Self{ .err = v };
         }
 
         pub fn ok(v: T) Self {
-            return Self { .ok = v };
+            return Self{ .ok = v };
         }
 
         pub fn unwrap(self: *const Self) T {
@@ -37,12 +37,12 @@ pub fn Result(comptime T: type, comptime E: type) type {
                 .ok => |_| @panic("Failed to unwrap err value"),
                 .err => |v| v,
             };
-        } 
+        }
 
         pub fn unwrapOr(self: *const Self, default: T) T {
             return switch (self.*) {
                 .ok => |v| v,
-                .err => |_| default
+                .err => |_| default,
             };
         }
     };

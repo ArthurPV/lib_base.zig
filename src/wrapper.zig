@@ -12,7 +12,7 @@ pub fn Wrapper(comptime T: type) type {
             return Self{
                 .value = v,
             };
-        } 
+        }
 
         /// Get value (const) from the Wrapper.
         pub fn get(self: *const Self) *const ?T {
