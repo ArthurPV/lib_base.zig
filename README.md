@@ -35,7 +35,7 @@ const std = @import("std");
 const Vec = @import("collections").Vec;
 
 test "test Vec" {
-    const TestingAllocator = std.testing.TestingAllocator;
+    const TestingAllocator = std.testing.allocator;
 
     const v = Vec(i32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
 
@@ -60,6 +60,12 @@ test "test Vec" {
 ## Stack
 
 ## String
+
+```zig
+const std = @import("std");
+
+const String = @import("base").String;
+```
 
 ## Trait
 
