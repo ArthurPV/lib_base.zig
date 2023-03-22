@@ -30,6 +30,8 @@ zig build test
 ## Vec
 
 ```zig
+// From `src/main.zig`
+
 const std = @import("std");
 
 const Vec = @import("collections").Vec;
