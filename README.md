@@ -1,4 +1,4 @@
-# zig_lib_base
+# lib_base.zig
 
 ## Summary
 
@@ -26,7 +26,7 @@ test "test Vec" {
     const std = @import("std");
     const TestingAllocator = std.testing.TestingAllocator;
 
-    var v = Vec(i32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
+    const v = Vec(i32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
 
     std.debug.assert(v.get().? == 1);
     std.debug.assert(v.get().? == 2);
