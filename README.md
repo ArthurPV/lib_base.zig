@@ -22,6 +22,8 @@
 ## Vec
 
 ```zig
+const Vec = @import("vec.zig").Vec;
+
 test "test Vec" {
     const std = @import("std");
     const TestingAllocator = std.testing.TestingAllocator;
