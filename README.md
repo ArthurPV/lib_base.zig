@@ -22,10 +22,11 @@
 ## Vec
 
 ```zig
+const std = @import("std");
+
 const Vec = @import("vec.zig").Vec;
 
 test "test Vec" {
-    const std = @import("std");
     const TestingAllocator = std.testing.TestingAllocator;
 
     const v = Vec(i32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
