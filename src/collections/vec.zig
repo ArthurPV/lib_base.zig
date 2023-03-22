@@ -1,5 +1,6 @@
 const std = @import("std");
 const trait = @import("../trait.zig");
+
 const Allocator = std.mem.Allocator;
 
 pub fn Vec(comptime T: type) type {
