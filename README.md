@@ -2,6 +2,7 @@
 
 ## Summary
 
+* [Build](#build)
 * [HashMap](#hashmap)
 * [HashSet](#hashset)
 * [Vec](#vec)
@@ -15,6 +16,13 @@
 * [Trait](#trait)
 * [Wrapper](#wrapper)
 
+## Build
+
+```
+cd lib_base.zig
+zig build test
+```
+
 ## HashMap
 
 ## HashSet
@@ -24,7 +32,7 @@
 ```zig
 const std = @import("std");
 
-const Vec = @import("vec.zig").Vec;
+const Vec = @import("collections").Vec;
 
 test "test Vec" {
     const TestingAllocator = std.testing.TestingAllocator;
