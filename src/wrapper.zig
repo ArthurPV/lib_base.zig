@@ -4,6 +4,7 @@ pub fn Wrapper(comptime T: type) type {
     return struct {
         const Self = @This();
 
+        /// Value of the Wrapper.
         value: ?T,
 
         /// Init a Wrapper.
