@@ -24,12 +24,12 @@ pub fn Result(comptime T: type, comptime E: type) type {
             };
         }
 
-        pub fn unwrap_err(self: *const Self) E {
+        pub fn unwrapErr(self: *const Self) E {
             return switch (self.*) {
                 .ok => |_| @panic("Failed to unwrap err value"),
                 .err => |v| v,
             };
-        }
+        } 
     };
 }
 
@@ -49,4 +49,16 @@ test "Result.ok" {
         .ok => |v| std.debug.assert(v == 30),
         .err => |_| std.debug.assert(false),
     }
+}
+
+test "Result.unwrap" {
+    const res = Result(i32, []const u8).ok(40);
+
+    std.debug.assert(res.unwrap() == 40);
+}
+
+test "Result.unwrapErr" {
+    const res = Result(i32, []const u8).err("error");
+
+    std.debug.assert(std.mem.eql(u8, res.unwrapErr(), "error"));
 }
