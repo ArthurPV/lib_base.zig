@@ -35,15 +35,16 @@ const std = @import("std");
 const Vec = @import("collections").Vec;
 
 test "test Vec" {
-    const TestingAllocator = std.testing.allocator;
+    const TestingAllocator = testing.allocator;
 
-    const v = Vec(i32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
+    const v = Vec(i32).initFrom(TestingAllocator, &[_]i32{ 1, 2, 3, 4, 5 });
+    defer v.deinit();
 
-    std.debug.assert(v.get().? == 1);
-    std.debug.assert(v.get().? == 2);
-    std.debug.assert(v.get().? == 3);
-    std.debug.assert(v.get().? == 4);
-    std.debug.assert(v.get().? == 5);
+    std.debug.assert(v.get(0).? == 1);
+    std.debug.assert(v.get(1).? == 2);
+    std.debug.assert(v.get(2).? == 3);
+    std.debug.assert(v.get(3).? == 4);
+    std.debug.assert(v.get(4).? == 5);
 }
 ```
 
