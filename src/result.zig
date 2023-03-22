@@ -9,6 +9,14 @@ pub fn Result(comptime T: type, comptime E: type) type {
         ok: T,
         err: E,
 
+        pub fn isErr(self: *const Self) bool {
+            return @as(ResultKind, self.*) == .err;
+        }
+
+        pub fn isOk(self: *const Self) bool {
+            return @as(ResultKind, self.*) == .ok;
+        }
+
         pub fn err(v: E) Self {
             return Self { .err = v };
         }
@@ -56,6 +64,18 @@ test "Result.ok" {
         .ok => |v| std.debug.assert(v == 30),
         .err => |_| std.debug.assert(false),
     }
+}
+
+test "Result.isErr" {
+    const res = Result(i32, []const u8).err("error");
+
+    std.debug.assert(res.isErr());
+}
+
+test "Result.isOk" {
+    const res = Result(i32, []const u8).ok(30);
+
+    std.debug.assert(res.isOk());
 }
 
 test "Result.unwrap" {
