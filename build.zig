@@ -33,6 +33,7 @@ pub fn build(b: *std.build.Builder) void {
 
     const main_tests = b.addTest("src/main.zig");
     main_tests.setBuildMode(mode);
+    main_tests.addPackage(collections_pkg);
 
     const base_tests = b.addTest("src/base.zig");
     base_tests.setBuildMode(mode);
