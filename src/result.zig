@@ -30,6 +30,20 @@ pub fn Result(comptime T: type, comptime E: type) type {
                 .err => |v| v,
             };
         } 
+
+        pub fn unwrapMut(self: *Self) *T {
+            return switch (self.*) {
+                .ok => |v| &v,
+                .err => |_| @panic("Failed to get ok value"),
+            };
+        }
+
+        pub fn unwrapMutErr(self: *Self) *E {
+            return switch (self.*) {
+                .ok => |_| @panic("Failed to get err value"),
+                .err => |v| &v,
+            };
+        }
     };
 }
 
