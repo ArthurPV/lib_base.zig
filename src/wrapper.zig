@@ -6,20 +6,25 @@ pub fn Wrapper(comptime T: type) type {
 
         value: ?T,
 
+        /// Init a Wrapper.
         pub fn init(v: T) Self {
             return Self{
                 .value = v,
             };
         } 
 
+        /// Get value (const) from the Wrapper.
         pub fn get(self: *const Self) *const ?T {
             return &self.value;
         }
 
+        /// Get value (mutable) from the Wrapper.
         pub fn getMut(self: *Self) *?T {
             return &self.value;
         }
 
+        /// Returns the value taken and assigns `null` to `self.value`.
+        /// unsafe: use instead of `move` function in the `src/move.zig` path.
         pub fn take(self: *Self) T {
             const value = self.value.?;
             self.value = null;
