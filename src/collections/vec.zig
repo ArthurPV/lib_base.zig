@@ -506,12 +506,12 @@ pub fn Vec(comptime T: type) type {
 
         /// Sort the vector in ascending order.
         pub fn sort(self: *const Self) void {
-            std.sort.sort(T, self.buffer[0..self.len], {}, comptime std.sort.asc(T));
+            std.mem.sort(T, self.buffer[0..self.len], {}, comptime std.sort.asc(T));
         }
 
         /// Sort the vector in descending order.
         pub fn sortDesc(self: *const Self) void {
-            std.sort.sort(T, self.buffer[0..self.len], {}, comptime std.sort.desc(T));
+            std.mem.sort(T, self.buffer[0..self.len], {}, comptime std.sort.desc(T));
         }
 
         /// Returns whether the vector starts with the given values.
@@ -1070,4 +1070,17 @@ test "Vec.truncate" {
     std.debug.assert(v.get(0).? == 1);
     std.debug.assert(v.get(1).? == 2);
     std.debug.assert(v.get(2).? == 3);
+}
+
+test "Vec.buffer.len" {
+    var v = Vec(u32).init(TestingAllocator);
+    defer v.deinit();
+
+    v.push(1);
+    v.push(2);
+    v.push(3);
+    v.push(4);
+    v.push(5);
+
+    std.debug.assert(v.buffer.len == 8);
 }
