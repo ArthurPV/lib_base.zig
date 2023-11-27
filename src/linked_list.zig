@@ -2,6 +2,8 @@ const std = @import("std");
 
 const Node = @import("node.zig").Node;
 
+const testing = std.testing;
+
 pub fn LinkedList(comptime T: type) type {
     return struct {
         const Self = @This();
@@ -40,9 +42,9 @@ test "LinkedList.append" {
     list.append(&n3);
     list.append(&n4);
 
-    std.debug.assert(list.len() == 4);
-    std.debug.assert(list.head.?.value == 0);
-    std.debug.assert(list.head.?.next.?.value == 1);
-    std.debug.assert(list.head.?.next.?.next.?.value == 2);
-    std.debug.assert(list.head.?.next.?.next.?.next.?.value == 3);
+    testing.expect(list.len() == 4);
+    testing.expect(list.head.?.value == 0);
+    testing.expect(list.head.?.next.?.value == 1);
+    testing.expect(list.head.?.next.?.next.?.value == 2);
+    testing.expect(list.head.?.next.?.next.?.next.?.value == 3);
 }

@@ -319,7 +319,7 @@ test "String.keepCharacter" {
     var iter = string.iter();
     iter.keepCharacter('l');
 
-    std.debug.assert(std.mem.eql(u8, "lll", string.asStr()));
+    try std.testing.expect(std.mem.eql(u8, "lll", string.asStr()));
 }
 
 test "String.takeOffCharacter" {
@@ -329,7 +329,7 @@ test "String.takeOffCharacter" {
     var iter = string.iter();
     iter.takeOffCharacter('l');
 
-    std.debug.assert(std.mem.eql(u8, "Heo, Word", string.asStr()));
+    try std.testing.expect(std.mem.eql(u8, "Heo, Word", string.asStr()));
 }
 
 test "String.countWhitespace" {
@@ -338,7 +338,7 @@ test "String.countWhitespace" {
 
     var iter = string.iter();
 
-    std.debug.assert(iter.countWhitespace() == 1);
+    try std.testing.expect(iter.countWhitespace() == 1);
 }
 
 test "String.init" {
@@ -352,7 +352,7 @@ test "String.initFrom" {
     var string = String.initFrom(allocator, "Hello, World");
     defer string.deinit();
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "Hello, World"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "Hello, World"));
 }
 
 test "String.insert" {
@@ -374,7 +374,7 @@ test "String.insert" {
 
     string.insert(5, ',');
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "Hello, World"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "Hello, World"));
 }
 
 test "String.insertStr" {
@@ -396,7 +396,7 @@ test "String.insertStr" {
 
     string.insertStr(5, ", ");
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "Hello,  World"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "Hello,  World"));
 }
 
 test "String.iter" {
@@ -406,18 +406,18 @@ test "String.iter" {
 
     var iter = string.iter();
 
-    std.debug.assert(iter.next().? == 'H');
-    std.debug.assert(iter.next().? == 'e');
-    std.debug.assert(iter.next().? == 'l');
-    std.debug.assert(iter.next().? == 'l');
-    std.debug.assert(iter.next().? == 'o');
-    std.debug.assert(iter.next().? == ',');
-    std.debug.assert(iter.next().? == ' ');
-    std.debug.assert(iter.next().? == 'W');
-    std.debug.assert(iter.next().? == 'o');
-    std.debug.assert(iter.next().? == 'r');
-    std.debug.assert(iter.next().? == 'l');
-    std.debug.assert(iter.next().? == 'd');
+    try std.testing.expect(iter.next().? == 'H');
+    try std.testing.expect(iter.next().? == 'e');
+    try std.testing.expect(iter.next().? == 'l');
+    try std.testing.expect(iter.next().? == 'l');
+    try std.testing.expect(iter.next().? == 'o');
+    try std.testing.expect(iter.next().? == ',');
+    try std.testing.expect(iter.next().? == ' ');
+    try std.testing.expect(iter.next().? == 'W');
+    try std.testing.expect(iter.next().? == 'o');
+    try std.testing.expect(iter.next().? == 'r');
+    try std.testing.expect(iter.next().? == 'l');
+    try std.testing.expect(iter.next().? == 'd');
 }
 
 test "String.push" {
@@ -438,7 +438,7 @@ test "String.push" {
     string.push('l');
     string.push('d');
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "Hello, World"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "Hello, World"));
 }
 
 test "String.pushStr" {
@@ -448,7 +448,7 @@ test "String.pushStr" {
 
     string.pushStr("Hello, World");
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "Hello, World"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "Hello, World"));
 }
 
 test "String.remove" {
@@ -471,7 +471,7 @@ test "String.remove" {
 
     _ = string.remove(5);
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "Hello World"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "Hello World"));
 }
 
 test "String.split" {
@@ -494,9 +494,9 @@ test "String.split" {
 
     var vec = string.split(',');
 
-    std.debug.assert(vec.len == 2);
-    std.debug.assert(std.mem.eql(u8, vec.get(0).?.asStr(), "Hello"));
-    std.debug.assert(std.mem.eql(u8, vec.get(1).?.asStr(), " World"));
+    try std.testing.expect(vec.len == 2);
+    try std.testing.expect(std.mem.eql(u8, vec.get(0).?.asStr(), "Hello"));
+    try std.testing.expect(std.mem.eql(u8, vec.get(1).?.asStr(), " World"));
 }
 
 test "String.toLowerCase" {
@@ -505,7 +505,7 @@ test "String.toLowerCase" {
 
     string.toLowerCase();
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "hello, world"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "hello, world"));
 }
 
 test "String.toUpperCase" {
@@ -514,5 +514,5 @@ test "String.toUpperCase" {
 
     string.toUpperCase();
 
-    std.debug.assert(std.mem.eql(u8, string.asStr(), "HELLO, WORLD"));
+    try std.testing.expect(std.mem.eql(u8, string.asStr(), "HELLO, WORLD"));
 }

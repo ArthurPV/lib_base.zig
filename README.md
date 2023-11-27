@@ -42,11 +42,11 @@ test "test Vec" {
     const v = Vec(i32).initFrom(TestingAllocator, &[_]i32{ 1, 2, 3, 4, 5 });
     defer v.deinit();
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 4);
-    std.debug.assert(v.get(4).? == 5);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 4);
+    try std.testing.expect(v.get(4).? == 5);
 }
 ```
 

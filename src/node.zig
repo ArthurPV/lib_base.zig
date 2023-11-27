@@ -49,8 +49,8 @@ test "Node.append" {
 
     node.append(&node2);
 
-    std.debug.assert(node.value == 40);
-    std.debug.assert(node.next.?.value == 60);
+    try std.testing.expect(node.value == 40);
+    try std.testing.expect(node.next.?.value == 60);
 }
 
 test "Node.count" {
@@ -59,8 +59,8 @@ test "Node.count" {
 
     node.append(&node2);
 
-    std.debug.assert(node.value == 40);
-    std.debug.assert(node.next.?.value == 60);
+    try std.testing.expect(node.value == 40);
+    try std.testing.expect(node.next.?.value == 60);
 
-    std.debug.assert(node.count() == 2);
+    try std.testing.expect(node.count() == 2);
 }

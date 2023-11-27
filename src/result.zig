@@ -52,8 +52,8 @@ test "Result.err" {
     const res = Result(i32, []const u8).err("error");
 
     switch (res) {
-        .ok => |_| std.debug.assert(false),
-        .err => |s| std.debug.assert(std.mem.eql(u8, s, "error")),
+        .ok => |_| try std.testing.expect(false),
+        .err => |s| try std.testing.expect(std.mem.eql(u8, s, "error")),
     }
 }
 
@@ -61,37 +61,37 @@ test "Result.ok" {
     const res = Result(i32, []const u8).ok(30);
 
     switch (res) {
-        .ok => |v| std.debug.assert(v == 30),
-        .err => |_| std.debug.assert(false),
+        .ok => |v| try std.testing.expect(v == 30),
+        .err => |_| try std.testing.expect(false),
     }
 }
 
 test "Result.isErr" {
     const res = Result(i32, []const u8).err("error");
 
-    std.debug.assert(res.isErr());
+    try std.testing.expect(res.isErr());
 }
 
 test "Result.isOk" {
     const res = Result(i32, []const u8).ok(30);
 
-    std.debug.assert(res.isOk());
+    try std.testing.expect(res.isOk());
 }
 
 test "Result.unwrap" {
     const res = Result(i32, []const u8).ok(40);
 
-    std.debug.assert(res.unwrap() == 40);
+    try std.testing.expect(res.unwrap() == 40);
 }
 
 test "Result.unwrapErr" {
     const res = Result(i32, []const u8).err("error");
 
-    std.debug.assert(std.mem.eql(u8, res.unwrapErr(), "error"));
+    try std.testing.expect(std.mem.eql(u8, res.unwrapErr(), "error"));
 }
 
 test "Result.unwrapOr" {
     const res = Result(i32, []const u8).err("error");
 
-    std.debug.assert(res.unwrapOr(30) == 30);
+    try std.testing.expect(res.unwrapOr(30) == 30);
 }

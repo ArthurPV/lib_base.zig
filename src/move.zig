@@ -18,11 +18,11 @@ test "move value" {
     var v = move(Vec(i32), &wrapper);
     defer v.deinit();
 
-    std.debug.assert(v.get(0).? == -1);
-    std.debug.assert(v.get(1).? == 0);
-    std.debug.assert(v.get(2).? == 1);
-    std.debug.assert(v.get(3).? == 2);
-    std.debug.assert(v.get(4).? == 3);
-    std.debug.assert(v.get(5).? == 4);
-    std.debug.assert(v.get(6).? == 5);
+    try std.testing.expect(v.get(0).? == -1);
+    try std.testing.expect(v.get(1).? == 0);
+    try std.testing.expect(v.get(2).? == 1);
+    try std.testing.expect(v.get(3).? == 2);
+    try std.testing.expect(v.get(4).? == 3);
+    try std.testing.expect(v.get(5).? == 4);
+    try std.testing.expect(v.get(6).? == 5);
 }

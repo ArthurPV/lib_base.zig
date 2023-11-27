@@ -60,25 +60,25 @@ test "Option.@\"and\"" {
 
     const res = Option(i32).@"and"(i64, op, op2);
 
-    std.debug.assert(res == .none);
+    try std.testing.expect(res == .none);
 }
 
 test "Option.insert" {
     var op = Option(i32).some(60);
 
-    std.debug.assert(op.unwrap() == 60);
+    try std.testing.expect(op.unwrap() == 60);
 
     _ = op.insert(70);
 
-    std.debug.assert(op.unwrap() == 70);
+    try std.testing.expect(op.unwrap() == 70);
 }
 
 test "Option.none" {
     const op = Option(i32).none();
 
     switch (op) {
-        .some => |_| std.debug.assert(false),
-        .none => std.debug.assert(true),
+        .some => |_| try std.testing.expect(false),
+        .none => try std.testing.expect(true),
     }
 }
 
@@ -88,22 +88,22 @@ test "Option.@\"or\"" {
 
     const res = op.@"or"(op2);
 
-    std.debug.assert(res.unwrap() == 70);
+    try std.testing.expect(res.unwrap() == 70);
 }
 
 test "Option.replace" {
     var op = Option(i32).some(10);
     const old = op.replace(40);
 
-    std.debug.assert(op.unwrap() == 40);
-    std.debug.assert(old.unwrap() == 10);
+    try std.testing.expect(op.unwrap() == 40);
+    try std.testing.expect(old.unwrap() == 10);
 }
 
 test "Option.some" {
     const op = Option(i32).some(30);
 
     switch (op) {
-        .some => |v| std.debug.assert(v == 30),
+        .some => |v| try std.testing.expect(v == 30),
         .none => {},
     }
 }
@@ -111,5 +111,5 @@ test "Option.some" {
 test "Option.unwrap" {
     const op = Option(i32).some(30);
 
-    std.debug.assert(op.unwrap() == 30);
+    try std.testing.expect(op.unwrap() == 30);
 }

@@ -73,7 +73,7 @@ test "Stack.initMaxSize" {
     var stack = Stack(u32).initMaxSize(std.heap.page_allocator, 2048);
     defer stack.deinit();
 
-    std.debug.assert(stack.max_size == 2048);
+    try std.testing.expect(stack.max_size == 2048);
 }
 
 test "Stack.push & Stack.pop" {
@@ -82,10 +82,10 @@ test "Stack.push & Stack.pop" {
 
     stack.push(1);
 
-    std.debug.assert(stack.top.? == 1);
+    try std.testing.expect(stack.top.? == 1);
 
     stack.push(2);
 
-    std.debug.assert(stack.pop().? == 2);
-    std.debug.assert(stack.top.? == 1);
+    try std.testing.expect(stack.pop().? == 2);
+    try std.testing.expect(stack.top.? == 1);
 }

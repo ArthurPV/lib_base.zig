@@ -52,58 +52,58 @@ pub fn Vec(comptime T: type) type {
             defer v.deinit();
 
             v.len = 0;
-            std.debug.assert(v.calcCapacityFromLen() == 4);
+            try std.testing.expect(v.calcCapacityFromLen() == 4);
 
             v.len = 1;
-            std.debug.assert(v.calcCapacityFromLen() == 4);
+            try std.testing.expect(v.calcCapacityFromLen() == 4);
 
             v.len = 2;
-            std.debug.assert(v.calcCapacityFromLen() == 4);
+            try std.testing.expect(v.calcCapacityFromLen() == 4);
 
             v.len = 3;
-            std.debug.assert(v.calcCapacityFromLen() == 4);
+            try std.testing.expect(v.calcCapacityFromLen() == 4);
 
             v.len = 4;
-            std.debug.assert(v.calcCapacityFromLen() == 4);
+            try std.testing.expect(v.calcCapacityFromLen() == 4);
 
             v.len = 5;
-            std.debug.assert(v.calcCapacityFromLen() == 8);
+            try std.testing.expect(v.calcCapacityFromLen() == 8);
 
             v.len = 6;
-            std.debug.assert(v.calcCapacityFromLen() == 8);
+            try std.testing.expect(v.calcCapacityFromLen() == 8);
 
             v.len = 7;
-            std.debug.assert(v.calcCapacityFromLen() == 8);
+            try std.testing.expect(v.calcCapacityFromLen() == 8);
 
             v.len = 8;
-            std.debug.assert(v.calcCapacityFromLen() == 8);
+            try std.testing.expect(v.calcCapacityFromLen() == 8);
 
             v.len = 9;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 10;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 11;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 12;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 13;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 14;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 15;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 16;
-            std.debug.assert(v.calcCapacityFromLen() == 16);
+            try std.testing.expect(v.calcCapacityFromLen() == 16);
 
             v.len = 17;
-            std.debug.assert(v.calcCapacityFromLen() == 32);
+            try std.testing.expect(v.calcCapacityFromLen() == 32);
         }
 
         /// Clears the vector.
@@ -373,10 +373,10 @@ pub fn Vec(comptime T: type) type {
 
             v.len = 4;
 
-            std.debug.assert(v.get(0).? == 12);
-            std.debug.assert(v.get(1).? == 30);
-            std.debug.assert(v.get(2).? == 40);
-            std.debug.assert(v.get(3).? == 60);
+            try std.testing.expect(v.get(0).? == 12);
+            try std.testing.expect(v.get(1).? == 30);
+            try std.testing.expect(v.get(2).? == 40);
+            try std.testing.expect(v.get(3).? == 60);
         }
 
         /// Returns whether the vector is not equal to the other vector.
@@ -582,9 +582,9 @@ test "Vec.appendSlice" {
 
     v.appendSlice(&[3]u32{ 1, 2, 3 });
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
 }
 
 test "Vec.asSlice" {
@@ -593,9 +593,9 @@ test "Vec.asSlice" {
 
     const slice = v.asSlice();
 
-    std.debug.assert(slice[0] == 1);
-    std.debug.assert(slice[1] == 2);
-    std.debug.assert(slice[2] == 3);
+    try std.testing.expect(slice[0] == 1);
+    try std.testing.expect(slice[1] == 2);
+    try std.testing.expect(slice[2] == 3);
 }
 
 test "Vec.clear" {
@@ -618,14 +618,14 @@ test "Vec.copy" {
     var v2 = v.copy();
     defer v2.deinit();
 
-    std.debug.assert(v2.len == 5);
-    std.debug.assert(v2.capacity == 8);
+    try std.testing.expect(v2.len == 5);
+    try std.testing.expect(v2.capacity == 8);
 
-    std.debug.assert(v2.get(0).? == 1);
-    std.debug.assert(v2.get(1).? == 2);
-    std.debug.assert(v2.get(2).? == 3);
-    std.debug.assert(v2.get(3).? == 4);
-    std.debug.assert(v2.get(4).? == 5);
+    try std.testing.expect(v2.get(0).? == 1);
+    try std.testing.expect(v2.get(1).? == 2);
+    try std.testing.expect(v2.get(2).? == 3);
+    try std.testing.expect(v2.get(3).? == 4);
+    try std.testing.expect(v2.get(4).? == 5);
 }
 
 test "Vec.copyFromSlice" {
@@ -634,14 +634,14 @@ test "Vec.copyFromSlice" {
 
     v.copyFromSlice(&[_]u32{ 1, 2, 3, 4, 5 });
 
-    std.debug.assert(v.len == 5);
-    std.debug.assert(v.capacity == 8);
+    try std.testing.expect(v.len == 5);
+    try std.testing.expect(v.capacity == 8);
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 4);
-    std.debug.assert(v.get(4).? == 5);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 4);
+    try std.testing.expect(v.get(4).? == 5);
 }
 
 test "Vec.endsWith" {
@@ -654,8 +654,8 @@ test "Vec.endsWith" {
     v.push(4);
     v.push(5);
 
-    std.debug.assert(v.endsWith(&[_]u32{ 4, 5 }));
-    std.debug.assert(!v.endsWith(&[_]u32{ 3, 4 }));
+    try std.testing.expect(v.endsWith(&[_]u32{ 4, 5 }));
+    try std.testing.expect(!v.endsWith(&[_]u32{ 3, 4 }));
 }
 
 test "Vec.eq" {
@@ -665,71 +665,71 @@ test "Vec.eq" {
     var v2 = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
     defer v2.deinit();
 
-    std.debug.assert(v.eq(&v2));
+    try std.testing.expect(v.eq(&v2));
 }
 
 test "Vec.find" {
     var v = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
     defer v.deinit();
 
-    std.debug.assert(v.find(3).? == 2);
-    std.debug.assert(v.find(5).? == 4);
+    try std.testing.expect(v.find(3).? == 2);
+    try std.testing.expect(v.find(5).? == 4);
 }
 
 test "Vec.first" {
     var v = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
     defer v.deinit();
 
-    std.debug.assert(v.first().? == 1);
+    try std.testing.expect(v.first().? == 1);
 
     _ = v.pop();
     _ = v.pop();
     _ = v.pop();
     _ = v.pop();
 
-    std.debug.assert(v.first().? == 1);
+    try std.testing.expect(v.first().? == 1);
 
     _ = v.pop();
 
-    std.debug.assert(v.first() == null);
+    try std.testing.expect(v.first() == null);
 }
 
 test "Vec.get" {
     var v = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
     defer v.deinit();
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 4);
-    std.debug.assert(v.get(4).? == 5);
-    std.debug.assert(v.get(5) == null);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 4);
+    try std.testing.expect(v.get(4).? == 5);
+    try std.testing.expect(v.get(5) == null);
 }
 
 test "Vec.init" {
     var v = Vec(u32).init(TestingAllocator);
     defer v.deinit();
 
-    std.debug.assert(v.len == 0);
-    std.debug.assert(v.capacity == 0);
+    try std.testing.expect(v.len == 0);
+    try std.testing.expect(v.capacity == 0);
 }
 
 test "Vec.initFrom" {
     var v = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
     defer v.deinit();
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 4);
-    std.debug.assert(v.get(4).? == 5);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 4);
+    try std.testing.expect(v.get(4).? == 5);
 }
 
 test "Vec.initWithCapacity" {
     var v = Vec(u32).initWithCapacity(TestingAllocator, 20);
     defer v.deinit();
 
-    std.debug.assert(v.capacity == 20);
+    try std.testing.expect(v.capacity == 20);
 }
 
 test "Vec.insert" {
@@ -744,15 +744,15 @@ test "Vec.insert" {
 
     v.insert(2, 6);
 
-    std.debug.assert(v.len == 6);
-    std.debug.assert(v.capacity == 8);
+    try std.testing.expect(v.len == 6);
+    try std.testing.expect(v.capacity == 8);
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 6);
-    std.debug.assert(v.get(3).? == 3);
-    std.debug.assert(v.get(4).? == 4);
-    std.debug.assert(v.get(5).? == 5);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 6);
+    try std.testing.expect(v.get(3).? == 3);
+    try std.testing.expect(v.get(4).? == 4);
+    try std.testing.expect(v.get(5).? == 5);
 }
 
 test "Vec.insertSlice" {
@@ -767,24 +767,24 @@ test "Vec.insertSlice" {
 
     v.insertSlice(2, &[_]u32{ 6, 7, 8 });
 
-    std.debug.assert(v.len == 8);
-    std.debug.assert(v.capacity == 8);
+    try std.testing.expect(v.len == 8);
+    try std.testing.expect(v.capacity == 8);
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 6);
-    std.debug.assert(v.get(3).? == 7);
-    std.debug.assert(v.get(4).? == 8);
-    std.debug.assert(v.get(5).? == 3);
-    std.debug.assert(v.get(6).? == 4);
-    std.debug.assert(v.get(7).? == 5);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 6);
+    try std.testing.expect(v.get(3).? == 7);
+    try std.testing.expect(v.get(4).? == 8);
+    try std.testing.expect(v.get(5).? == 3);
+    try std.testing.expect(v.get(6).? == 4);
+    try std.testing.expect(v.get(7).? == 5);
 }
 
 test "Vec.isEmpty" {
     var v = Vec(u32).init(TestingAllocator);
     defer v.deinit();
 
-    std.debug.assert(v.isEmpty());
+    try std.testing.expect(v.isEmpty());
 }
 
 test "Vec.isSorted" {
@@ -797,14 +797,14 @@ test "Vec.isSorted" {
     v.push(4);
     v.push(5);
 
-    std.debug.assert(v.isSorted());
+    try std.testing.expect(v.isSorted());
 }
 
 test "Vec.isSortedDesc" {
     var v = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 5, 4, 3, 2, 1 });
     defer v.deinit();
 
-    std.debug.assert(v.isSortedDesc());
+    try std.testing.expect(v.isSortedDesc());
 }
 
 test "Vec.iter" {
@@ -821,7 +821,7 @@ test "Vec.iter" {
     var i: usize = 1;
 
     while (iter.next()) |value| {
-        std.debug.assert(value == i);
+        try std.testing.expect(value == i);
         i += 1;
     }
 }
@@ -830,18 +830,18 @@ test "Vec.last" {
     var v = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 4, 5 });
     defer v.deinit();
 
-    std.debug.assert(v.last().? == 5);
+    try std.testing.expect(v.last().? == 5);
 
     _ = v.pop();
     _ = v.pop();
     _ = v.pop();
     _ = v.pop();
 
-    std.debug.assert(v.last().? == 1);
+    try std.testing.expect(v.last().? == 1);
 
     _ = v.pop();
 
-    std.debug.assert(v.last() == null);
+    try std.testing.expect(v.last() == null);
 }
 
 test "Vec.ne" {
@@ -851,7 +851,7 @@ test "Vec.ne" {
     var v2 = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 5, 4, 3, 2, 1 });
     defer v2.deinit();
 
-    std.debug.assert(v.ne(&v2));
+    try std.testing.expect(v.ne(&v2));
 }
 
 test "Vec.pop" {
@@ -864,12 +864,12 @@ test "Vec.pop" {
     v.push(4);
     v.push(5);
 
-    std.debug.assert(v.pop().? == 5);
-    std.debug.assert(v.pop().? == 4);
-    std.debug.assert(v.pop().? == 3);
-    std.debug.assert(v.pop().? == 2);
-    std.debug.assert(v.pop().? == 1);
-    std.debug.assert(v.pop() == null);
+    try std.testing.expect(v.pop().? == 5);
+    try std.testing.expect(v.pop().? == 4);
+    try std.testing.expect(v.pop().? == 3);
+    try std.testing.expect(v.pop().? == 2);
+    try std.testing.expect(v.pop().? == 1);
+    try std.testing.expect(v.pop() == null);
 }
 
 test "Vec.push" {
@@ -882,14 +882,14 @@ test "Vec.push" {
     v.push(4);
     v.push(5);
 
-    std.debug.assert(v.len == 5);
-    std.debug.assert(v.capacity == 8);
+    try std.testing.expect(v.len == 5);
+    try std.testing.expect(v.capacity == 8);
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 4);
-    std.debug.assert(v.get(4).? == 5);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 4);
+    try std.testing.expect(v.get(4).? == 5);
 }
 
 test "Vec.remove" {
@@ -902,12 +902,12 @@ test "Vec.remove" {
     v.push(4);
     v.push(5);
 
-    std.debug.assert(v.remove(0).? == 1);
-    std.debug.assert(v.remove(1).? == 3);
-    std.debug.assert(v.remove(1).? == 4);
-    std.debug.assert(v.remove(0).? == 2);
-    std.debug.assert(v.remove(0).? == 5);
-    std.debug.assert(v.remove(0) == null);
+    try std.testing.expect(v.remove(0).? == 1);
+    try std.testing.expect(v.remove(1).? == 3);
+    try std.testing.expect(v.remove(1).? == 4);
+    try std.testing.expect(v.remove(0).? == 2);
+    try std.testing.expect(v.remove(0).? == 5);
+    try std.testing.expect(v.remove(0) == null);
 }
 
 test "Vec.repeat" {
@@ -919,15 +919,15 @@ test "Vec.repeat" {
 
     v.repeat(2);
 
-    std.debug.assert(v.len == 6);
-    std.debug.assert(v.capacity == 6);
+    try std.testing.expect(v.len == 6);
+    try std.testing.expect(v.capacity == 6);
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 1);
-    std.debug.assert(v.get(3).? == 2);
-    std.debug.assert(v.get(4).? == 1);
-    std.debug.assert(v.get(5).? == 2);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 1);
+    try std.testing.expect(v.get(3).? == 2);
+    try std.testing.expect(v.get(4).? == 1);
+    try std.testing.expect(v.get(5).? == 2);
 }
 
 test "Vec.reverse" {
@@ -942,21 +942,21 @@ test "Vec.reverse" {
 
     v.reverse();
 
-    std.debug.assert(v.len == 5);
-    std.debug.assert(v.capacity == 8);
+    try std.testing.expect(v.len == 5);
+    try std.testing.expect(v.capacity == 8);
 
-    std.debug.assert(v.get(0).? == 5);
-    std.debug.assert(v.get(1).? == 4);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 2);
-    std.debug.assert(v.get(4).? == 1);
+    try std.testing.expect(v.get(0).? == 5);
+    try std.testing.expect(v.get(1).? == 4);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 2);
+    try std.testing.expect(v.get(4).? == 1);
 }
 
 test "Vec.rfind" {
     var v = Vec(u32).initFrom(TestingAllocator, &[_]u32{ 1, 2, 3, 1, 5 });
     defer v.deinit();
 
-    std.debug.assert(v.rfind(1).? == 3);
+    try std.testing.expect(v.rfind(1).? == 3);
 }
 
 test "Vec.set" {
@@ -965,7 +965,7 @@ test "Vec.set" {
 
     v.set(2, 10);
 
-    std.debug.assert(v.get(2).? == 10);
+    try std.testing.expect(v.get(2).? == 10);
 }
 
 test "Vec.split" {
@@ -981,16 +981,16 @@ test "Vec.split" {
     var v1 = v.split(2);
     defer v1.deepDeinit(Vec(u32).deinit);
 
-    std.debug.assert(v1.len == 2);
-    std.debug.assert(v1.capacity == 4);
+    try std.testing.expect(v1.len == 2);
+    try std.testing.expect(v1.capacity == 4);
 
-    std.debug.assert(v1.get(0).?.len == 1);
-    std.debug.assert(v1.get(0).?.get(0).? == 1);
+    try std.testing.expect(v1.get(0).?.len == 1);
+    try std.testing.expect(v1.get(0).?.get(0).? == 1);
 
-    std.debug.assert(v1.get(1).?.len == 3);
-    std.debug.assert(v1.get(1).?.get(0).? == 3);
-    std.debug.assert(v1.get(1).?.get(1).? == 4);
-    std.debug.assert(v1.get(1).?.get(2).? == 5);
+    try std.testing.expect(v1.get(1).?.len == 3);
+    try std.testing.expect(v1.get(1).?.get(0).? == 3);
+    try std.testing.expect(v1.get(1).?.get(1).? == 4);
+    try std.testing.expect(v1.get(1).?.get(2).? == 5);
 }
 
 test "Vec.sort" {
@@ -1005,14 +1005,14 @@ test "Vec.sort" {
 
     v.sort();
 
-    std.debug.assert(v.len == 5);
-    std.debug.assert(v.capacity == 8);
+    try std.testing.expect(v.len == 5);
+    try std.testing.expect(v.capacity == 8);
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 4);
-    std.debug.assert(v.get(4).? == 5);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 4);
+    try std.testing.expect(v.get(4).? == 5);
 }
 
 test "Vec.sortDesc" {
@@ -1021,11 +1021,11 @@ test "Vec.sortDesc" {
 
     v.sortDesc();
 
-    std.debug.assert(v.get(0).? == 5);
-    std.debug.assert(v.get(1).? == 4);
-    std.debug.assert(v.get(2).? == 3);
-    std.debug.assert(v.get(3).? == 2);
-    std.debug.assert(v.get(4).? == 1);
+    try std.testing.expect(v.get(0).? == 5);
+    try std.testing.expect(v.get(1).? == 4);
+    try std.testing.expect(v.get(2).? == 3);
+    try std.testing.expect(v.get(3).? == 2);
+    try std.testing.expect(v.get(4).? == 1);
 }
 
 test "Vec.startsWith" {
@@ -1038,8 +1038,8 @@ test "Vec.startsWith" {
     v.push(4);
     v.push(5);
 
-    std.debug.assert(v.startsWith(&[_]u32{ 1, 2 }));
-    std.debug.assert(!v.startsWith(&[_]u32{ 2, 3 }));
+    try std.testing.expect(v.startsWith(&[_]u32{ 1, 2 }));
+    try std.testing.expect(!v.startsWith(&[_]u32{ 2, 3 }));
 }
 
 test "Vec.swap" {
@@ -1048,8 +1048,8 @@ test "Vec.swap" {
 
     v.swap(0, 4);
 
-    std.debug.assert(v.get(0).? == 5);
-    std.debug.assert(v.get(4).? == 1);
+    try std.testing.expect(v.get(0).? == 5);
+    try std.testing.expect(v.get(4).? == 1);
 }
 
 test "Vec.truncate" {
@@ -1064,12 +1064,12 @@ test "Vec.truncate" {
 
     v.truncate(3);
 
-    std.debug.assert(v.len == 3);
-    std.debug.assert(v.capacity == 4);
+    try std.testing.expect(v.len == 3);
+    try std.testing.expect(v.capacity == 4);
 
-    std.debug.assert(v.get(0).? == 1);
-    std.debug.assert(v.get(1).? == 2);
-    std.debug.assert(v.get(2).? == 3);
+    try std.testing.expect(v.get(0).? == 1);
+    try std.testing.expect(v.get(1).? == 2);
+    try std.testing.expect(v.get(2).? == 3);
 }
 
 test "Vec.buffer.len" {
@@ -1082,5 +1082,5 @@ test "Vec.buffer.len" {
     v.push(4);
     v.push(5);
 
-    std.debug.assert(v.buffer.len == 8);
+    try std.testing.expect(v.buffer.len == 8);
 }

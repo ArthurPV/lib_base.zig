@@ -38,14 +38,14 @@ pub fn Wrapper(comptime T: type) type {
 test "Wrapper.init" {
     const wrapper = Wrapper(i32).init(30);
 
-    std.debug.assert(wrapper.value.? == 30);
+    try std.testing.expect(wrapper.value.? == 30);
 }
 
 test "Wrapper.get" {
     const wrapper = Wrapper(i32).init(10);
     const res = wrapper.get();
 
-    std.debug.assert(res.*.? == 10);
+    try std.testing.expect(res.*.? == 10);
 }
 
 test "Wrapper.getMut" {
@@ -54,13 +54,13 @@ test "Wrapper.getMut" {
 
     res.* = 60;
 
-    std.debug.assert(res.*.? == 60);
+    try std.testing.expect(res.*.? == 60);
 }
 
 test "Wrapper.take" {
     var wrapper = Wrapper(i32).init(10);
     var res = wrapper.take();
 
-    std.debug.assert(res == 10);
-    std.debug.assert(wrapper.value == null);
+    try std.testing.expect(res == 10);
+    try std.testing.expect(wrapper.value == null);
 }
