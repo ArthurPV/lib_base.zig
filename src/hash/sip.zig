@@ -46,7 +46,7 @@ const SipHashState = struct {
 };
 
 pub fn hash(key: *const u8, key_len: usize, comptime k0: usize, comptime k1: usize) usize {
-    comptime std.debug.assert(@sizeOf(usize) == 8 or @sizeOf(usize) == 4, "unsupported platform");
+    comptime std.debug.assert(@sizeOf(usize) == 8 or @sizeOf(usize) == 4);
 
     var state = blk: {
         if (@sizeOf(usize) == 8) {
