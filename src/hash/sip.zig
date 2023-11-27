@@ -1,8 +1,8 @@
 const std = @import("std");
 const builtin = @import("builtin");
 
-fn rotate_left(value: usize, bits: usize) usize {
-    return (((value) << (bits)) | ((value) >> (64 - (bits))));
+fn rotate_left(value: usize, bits: u6) usize {
+    return (value << bits) | (value >> (63 - bits + 1));
 }
 
 const SipHashState = struct {
@@ -31,7 +31,7 @@ const SipHashState = struct {
     }
 
     pub fn final(self: *Self, len: usize) void {
-        self.v2 ^= 0xff;
+        self.v2 ^= 0xFF;
 
         for (0..4) |_| {
             self.mix();
@@ -66,11 +66,11 @@ pub fn hash(key: *const u8, key_len: usize, comptime k0: usize, comptime k1: usi
         }
     };
 
-    const key_bytes = @as(*const u8, @ptrCast(key));
-    const end = key_bytes + key_len - (key_len % @sizeOf(usize));
-    const blocks = @as(*const usize, key_bytes);
+    var key_bytes = @as(*u8, @constCast(@ptrCast(key)));
+    const end: *const u8 = @ptrFromInt(@intFromPtr(key_bytes) + key_len - (key_len % @sizeOf(usize)));
+    var blocks: *usize = @constCast(@alignCast(@ptrCast(key_bytes)));
 
-    while (key_bytes < end) {
+    while (@intFromPtr(key_bytes) < @intFromPtr(end)) {
         state.v3 ^= blocks.*;
 
         for (0..2) |_| {
@@ -78,13 +78,14 @@ pub fn hash(key: *const u8, key_len: usize, comptime k0: usize, comptime k1: usi
         }
 
         state.v0 ^= blocks.*;
-        blocks = blocks + 1;
-        key_bytes = key_bytes + @sizeOf(usize);
+        blocks = @ptrFromInt(@intFromPtr(blocks) + 1);
+        key_bytes = @ptrFromInt(@intFromPtr(key_bytes) + @sizeOf(usize));
     }
 
     var last_block: usize = 0;
+    _ = std.zig.c_builtins.__builtin_memcpy(&last_block, key_bytes, key_len % @sizeOf(usize));
 
-    @memcpy(&last_block, key_bytes);
+    // @memcpy(&last_block, key_bytes);
 
     state.v3 ^= last_block;
 

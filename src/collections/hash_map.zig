@@ -1,4 +1,5 @@
 const std = @import("std");
+const Vec = @import("../collections/vec.zig");
 const fnv = @import("../hash/fnv.zig");
 const jenkins = @import("../hash/jenkins.zig");
 const sip = @import("../hash/sip.zig");
@@ -22,7 +23,22 @@ pub fn HashMapWithContext(comptime V: type, comptime C: Context) type {
 
         const Bucket = struct {
             pair: Pair,
-            next: ?*Bucket,
+            next: ?*Bucket = null,
+
+            pub fn init(key: []const u8, value: V) Bucket {
+                return .{ .pair = .{
+                    .key = key,
+                    .value = value,
+                } };
+            }
+
+            pub fn initPtr(allocator: Allocator, bucket: Bucket) *Bucket {
+                var bucket_ptr = allocator.alloc(Bucket, 1) catch unreachable;
+
+                bucket_ptr.* = bucket;
+
+                return bucket_ptr;
+            }
 
             pub fn get(self: *const Bucket, key: []const u8) *const Bucket {
                 if (std.mem.eql([]const u8, self.pair.key, key)) {
@@ -37,12 +53,8 @@ pub fn HashMapWithContext(comptime V: type, comptime C: Context) type {
             }
         };
 
-        /// The number of buckets in the hash map.
-        buckets: []Bucket,
-        /// Then length of the buckets array.
-        len: usize,
-        /// The capacity of the hash map.
-        capacity: usize,
+        /// The buffer of the hash map.
+        buckets: Vec(?Bucket),
         /// The allocator of the hash map.
         allocator: Allocator,
 
@@ -51,26 +63,23 @@ pub fn HashMapWithContext(comptime V: type, comptime C: Context) type {
 
         pub fn init(allocator: Allocator) Self {
             return .{
-                .buckets = &[_]Bucket{},
-                .len = 0,
-                .capacity = 0,
                 .allocator = allocator,
             };
         }
 
         fn hash(input: []const u8) usize {
             switch (C) {
-                Context.fnv1a => if (@sizeOf(usize) == 8) {
+                .fnv1a => if (@sizeOf(usize) == 8) {
                     return fnv.Fnv1a64.hash(input);
                 } else {
                     return fnv.Fnv1a32.hash(input);
                 },
-                Context.siphash => if (@sizeOf(usize) == 8) {
-                    return sip.hash(input, input.len, 0x0123456789abcdef, 0xfedcba9876543210);
+                .siphash => if (@sizeOf(usize) == 8) {
+                    return sip.hash(@ptrCast(input), input.len, 0x0123456789abcdef, 0xfedcba9876543210);
                 } else {
-                    return sip.hash(input, input.len, 0x01234567, 0x89abcdef);
+                    return sip.hash(@ptrCast(input), input.len, 0x01234567, 0x89abcdef);
                 },
-                Context.jenkins => return jenkins.hash(input),
+                .jenkins => return jenkins.hash(input),
             }
         }
 
@@ -84,9 +93,9 @@ pub fn HashMapWithContext(comptime V: type, comptime C: Context) type {
             }
 
             const index_ = self.index(key);
-            const bucket = self.buckets[index_];
+            const bucket = self.buckets.get(index_);
 
-            if (bucket != undefined) {
+            if (bucket) {
                 const res = bucket.get(key);
 
                 if (res) {
@@ -106,14 +115,14 @@ pub fn HashMapWithContext(comptime V: type, comptime C: Context) type {
                 return is_exist;
             }
 
-            if (self.buckets[index_] != undefined) {
+            if (self.buckets[index_]) {
                 const current = self.buckets[index_];
 
                 while (current.next) {
                     current = current.next;
                 }
 
-                current.next = new;
+                current.next = Bucket.initPtr(self.allocator, new);
 
                 return null;
             }
@@ -123,15 +132,65 @@ pub fn HashMapWithContext(comptime V: type, comptime C: Context) type {
             return null;
         }
 
-        pub fn insert(self: *HashMap, key: []const u8, value: V) ?V {
-            _ = value;
+        pub fn insert(self: *Self, key: []const u8, value: V) ?V {
             const index_ = self.index(key);
-            _ = index_;
 
             if (self.buckets.len == 0) {
-                self.buckets = self.allocator.alloc([]Bucket, 1);
-                self.capacity = 1;
+                var new_buckets = self.create_new_buckets(self.capacity).?;
+
+                self.buckets = new_buckets;
+                self.buckets[index_] = Bucket.init(key, value);
+
+                self.len += 1;
+
+                return null;
             }
+
+            if (self.len + 1 > self.capacity) {
+                self.capacity *= 2;
+
+                var new_buckets = self.create_new_buckets(self.capacity).?;
+                const old_buckets = self.buckets;
+
+                self.buckets = new_buckets;
+
+                // Re-hash all inserted K-V
+                for (0..self.len) |i| {
+                    var current = &old_buckets[i];
+
+                    while (current.* != null) {
+                        const next = current.*.?.next;
+                        const new_index = self.index(current.*.?.pair.key);
+
+                        current.*.?.next = new_buckets[new_index];
+                        new_buckets[new_index] = current;
+                        current = next;
+                    }
+                }
+
+                self.allocator.free(old_buckets);
+
+                // Reload index
+                index = self.index(key);
+            }
+
+            const is_exist = self.push_bucket(index, .{ .key = key, .value = value });
+
+            if (is_exist) {
+                return is_exist;
+            }
+
+            self.len += 1;
+
+            return null;
+        }
+
+        pub fn deinit(self: *Self) void {
+            for (0..self.buckets.len) |i| {
+                _ = i;
+            }
+
+            self.allocator.free(self.buckets);
         }
     };
 }
@@ -140,4 +199,12 @@ pub fn HashMapWithContext(comptime V: type, comptime C: Context) type {
 /// The default hashing algorithm is `siphash`.
 pub fn HashMap(comptime V: type) type {
     return HashMapWithContext(V, Context.siphash);
+}
+
+const TestingAllocator = std.testing.allocator;
+
+test "HashMap.init" {
+    var hm = HashMap(u5).init(TestingAllocator);
+
+    try std.testing.expect(hm.insert("A", 1) == null);
 }
